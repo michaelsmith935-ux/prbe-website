@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRBE - Probabilistic Risk-Based Estimating</title>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --primary-light: #2c5282;
+            --accent: #3182ce;
+            --accent-bright: #4299e1;
+            --green: #27ae60;
+            --green-hover: #219a52;
+            --bg: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --hero-gradient: linear-gradient(135deg, #1e3a5f 0%, #2c5282 50%, #2b6cb0 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            background: var(--bg);
+        }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* ========== NAV ========== */
+        nav {
+            background: var(--primary);
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav-logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: white; text-decoration: none; }
+
+        .nav-cta {
+            background: var(--green);
+            color: white !important;
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .nav-cta:hover { background: var(--green-hover); }
+
+        .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+        .nav-toggle span { display: block; width: 24px; height: 2px; background: white; margin: 5px 0; transition: 0.3s; }
+
+        /* ========== HERO ========== */
+        .hero {
+            background: var(--hero-gradient);
+            color: white;
+            padding: 5rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg);
+            clip-path: ellipse(55% 100% at 50% 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero h1 span { color: #90cdf4; }
+
+        .hero-sub {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 0.75rem;
+        }
+
+        .hero-tagline {
+            font-size: 1rem;
+            opacity: 0.7;
+            font-style: italic;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.15s, box-shadow 0.2s;
+        }
+
+        .btn:hover { transform: translateY(-2px); text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+
+        .btn-primary { background: var(--green); color: white; }
+        .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 2px solid rgba(255,255,255,0.4); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.25); }
+
+        .hero-screenshot {
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .hero-screenshot img {
+            width: 100%;
+            display: block;
+        }
+
+        /* ========== SECTIONS ========== */
+        .section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* ========== FEATURES ========== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            background: #ebf4ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* ========== SHOWCASE ========== */
+        .showcase-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .showcase-item.reverse { direction: rtl; }
+        .showcase-item.reverse > * { direction: ltr; }
+
+        .showcase-text h3 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .showcase-text p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .showcase-text ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .showcase-text ul li {
+            padding: 0.3rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .showcase-text ul li::before {
+            content: "\2713";
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .showcase-img {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .showcase-img img {
+            width: 100%;
+            display: block;
+        }
+
+        /* ========== METHODOLOGY ========== */
+        .methodology-bg {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            color: white;
+            padding: 5rem 2rem;
+        }
+
+        .methodology-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .methodology-inner h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .methodology-inner > p {
+            text-align: center;
+            opacity: 0.85;
+            max-width: 650px;
+            margin: 0 auto 3rem;
+            font-size: 1.05rem;
+        }
+
+        .method-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .method-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.75rem;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .method-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .method-card p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .method-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* ========== PRICING ========== */
+        .pricing-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            max-width: 480px;
+            margin: 0 auto;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .pricing-header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+        }
+
+        .pricing-header h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .pricing-note { opacity: 0.8; font-size: 0.95rem; }
+
+        .pricing-body {
+            padding: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features li {
+            padding: 0.6rem 0;
+            padding-left: 1.75rem;
+            position: relative;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pricing-features li:last-child { border-bottom: none; }
+
+        .pricing-features li::before {
+            content: "\2713";
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .pricing-body .btn {
+            width: 100%;
+            justify-content: center;
+            font-size: 1.1rem;
+            padding: 1rem;
+        }
+
+        .trial-note {
+            margin-top: 1rem;
+            font-size: 0.88rem;
+            color: var(--text-light);
+        }
+
+        /* ========== ABOUT ========== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .about-contact {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .about-contact h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .contact-icon {
+            width: 36px;
+            height: 36px;
+            background: #ebf4ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: var(--primary);
+            color: rgba(255,255,255,0.7);
+            padding: 3rem 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer a { color: rgba(255,255,255,0.85); }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero-sub { font-size: 1.05rem; }
+            .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--primary); flex-direction: column; padding: 1rem 2rem; gap: 1rem; }
+            .nav-links.active { display: flex; }
+            .nav-toggle { display: block; }
+            .showcase-item, .showcase-item.reverse { grid-template-columns: 1fr; direction: ltr; }
+            .about-grid { grid-template-columns: 1fr; }
+            .section-header h2 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <div class="nav-logo">PRBE</div>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#screenshots">Screenshots</a></li>
+            <li><a href="#methodology">Methodology</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="https://github.com/michaelsmith935-ux/PRBE/releases" target="_blank">Download</a></li>
+            <li><a href="purchase.html" class="nav-cta">Purchase License</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <h1>Probabilistic Risk-Based <span>Estimating</span></h1>
+    <p class="hero-sub">Desktop application for rigorous, Monte Carlo-powered cost and schedule risk analysis of highway construction projects.</p>
+    <p class="hero-tagline">Improving the reliability of project estimates one analysis at a time</p>
+    <div class="hero-buttons">
+        <a href="https://github.com/michaelsmith935-ux/PRBE/releases" target="_blank" class="btn btn-primary">Download Free Trial</a>
+        <a href="purchase.html" class="btn btn-secondary">Purchase License &mdash; $29.99</a>
+    </div>
+    <div class="hero-screenshot">
+        <img src="images/image14.png" alt="PRBE Simulation Results - Distribution Charts showing probability distributions for project cost and completion date">
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+    <div class="section-header">
+        <h2>Powerful Risk Analysis Made Accessible</h2>
+        <p>PRBE automates the NHI Course 134205 methodology, bringing rigorous probabilistic analysis to every project team.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">&#127922;</div>
+            <h3>Monte Carlo Simulation</h3>
+            <p>Run thousands of iterations with configurable parameters, convergence monitoring, and reproducible results via random seed control.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128202;</div>
+            <h3>Distribution Charts</h3>
+            <p>Interactive PDF and CDF charts for total cost (current year and year-of-expenditure) and project completion date with percentile analysis.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#127943;</div>
+            <h3>Tornado &amp; Sensitivity Analysis</h3>
+            <p>Identify which risk variables have the greatest influence on cost and schedule using Spearman rank correlation tornado charts.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128200;</div>
+            <h3>Tail Driver Analysis</h3>
+            <p>Understand which risks drive extreme outcomes with fire rate comparison, excess contribution metrics, and plain-language interpretations.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128176;</div>
+            <h3>Market Conditions Modeling</h3>
+            <p>Model Better-Than-Planned, As-Planned, and Worse-Than-Planned market scenarios with probability-weighted cost multipliers.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128279;</div>
+            <h3>Correlation Analysis</h3>
+            <p>Define cost-cost, schedule-schedule, and cross-type correlations using a Gaussian copula for realistic multi-variable modeling.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128197;</div>
+            <h3>Inflation &amp; YOE Adjustment</h3>
+            <p>Convert current-year costs to year-of-expenditure dollars with customizable inflation tables and phase-segment predecessors.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128196;</div>
+            <h3>Risk Register &amp; Reporting</h3>
+            <p>Comprehensive risk register with customizable views (Brief, Standard, Full), CSV/Excel export, and print-optimized layouts.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128230;</div>
+            <h3>Import &amp; Export</h3>
+            <p>Import risks from Excel templates, export risk registers, and backup/restore complete projects for transfer or archival.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SCREENSHOTS SHOWCASE -->
+<section class="section" id="screenshots">
+    <div class="section-header">
+        <h2>See PRBE in Action</h2>
+        <p>A modern, browser-based interface that's powerful yet intuitive. All data stays local on your machine.</p>
+    </div>
+
+    <!-- Showcase 1: Project Management -->
+    <div class="showcase-item">
+        <div class="showcase-text">
+            <h3>Project Management</h3>
+            <p>Organize multiple projects with an intuitive dashboard. Create, duplicate, and manage projects with full backup and restore capability.</p>
+            <ul>
+                <li>Create unlimited projects (licensed)</li>
+                <li>Export and import project backups</li>
+                <li>Duplicate projects for scenario analysis</li>
+                <li>Organized sidebar navigation</li>
+            </ul>
+        </div>
+        <div class="showcase-img">
+            <img src="images/image1.png" alt="PRBE Project List - Home page showing project cards">
+        </div>
+    </div>
+
+    <!-- Showcase 2: Risk Identification -->
+    <div class="showcase-item reverse">
+        <div class="showcase-text">
+            <h3>Risk Identification</h3>
+            <p>Define risk events with probability distributions, dependency types, and detailed documentation. Import risks directly from Excel templates.</p>
+            <ul>
+                <li>Triangular, BetaPERT, Uniform, and Normal distributions</li>
+                <li>Visual distribution editor with PDF/CDF preview</li>
+                <li>Mutually inclusive/exclusive dependency modeling</li>
+                <li>Excel template import for workshop data</li>
+            </ul>
+        </div>
+        <div class="showcase-img">
+            <img src="images/image7.png" alt="PRBE Risk Identification page with risk table">
+        </div>
+    </div>
+
+    <!-- Showcase 3: Simulation Results -->
+    <div class="showcase-item">
+        <div class="showcase-text">
+            <h3>Contingency Analysis</h3>
+            <p>Get clear, defensible budget recommendations with detailed statistics for current-year and year-of-expenditure costs.</p>
+            <ul>
+                <li>Risk-based contingency calculation</li>
+                <li>P10 through P90 percentile tracking</li>
+                <li>Budget recommendation with confidence level</li>
+                <li>Printable summary reports</li>
+            </ul>
+        </div>
+        <div class="showcase-img">
+            <img src="images/image13.png" alt="PRBE Contingency Analysis and Summary Statistics">
+        </div>
+    </div>
+
+    <!-- Showcase 4: Tornado Charts -->
+    <div class="showcase-item reverse">
+        <div class="showcase-text">
+            <h3>Sensitivity &amp; Tail Drivers</h3>
+            <p>Pinpoint exactly which risks matter most with tornado charts and tail driver analysis, so teams can focus mitigation where it counts.</p>
+            <ul>
+                <li>Spearman rank correlation tornado charts</li>
+                <li>Top 3 favorable and adverse tail drivers</li>
+                <li>Fire rate and excess contribution metrics</li>
+                <li>Phase-segment drill-down capability</li>
+            </ul>
+        </div>
+        <div class="showcase-img">
+            <img src="images/image15.png" alt="PRBE Tornado Chart showing sensitivity analysis">
+        </div>
+    </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="methodology-bg" id="methodology">
+    <div class="methodology-inner">
+        <h2>Built on Proven Methodology</h2>
+        <p>PRBE implements the National Highway Institute (NHI) Course 134205 framework for risk-based estimating in transportation projects.</p>
+        <div class="method-cards">
+            <div class="method-card">
+                <div class="method-num">1</div>
+                <h4>Define Structure</h4>
+                <p>Set up segments, phases, and cost categories that match your project scope.</p>
+            </div>
+            <div class="method-card">
+                <div class="method-num">2</div>
+                <h4>Enter Base Estimates</h4>
+                <p>Input cost and schedule data with variability ranges for each phase-segment.</p>
+            </div>
+            <div class="method-card">
+                <div class="method-num">3</div>
+                <h4>Identify Risks</h4>
+                <p>Add risk events with probability distributions, correlations, and market conditions.</p>
+            </div>
+            <div class="method-card">
+                <div class="method-num">4</div>
+                <h4>Run Simulation</h4>
+                <p>Execute Monte Carlo analysis and review distribution charts, tornado diagrams, and tail drivers.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+    <div class="section-header">
+        <h2>Simple, One-Time Pricing</h2>
+        <p>Start with a free 90-day trial. Purchase when you're ready.</p>
+    </div>
+    <div class="pricing-card">
+        <div class="pricing-header">
+            <h3>PRBE Full License</h3>
+            <div class="pricing-price">$29.99</div>
+            <div class="pricing-note">One-time payment &bull; Lifetime license</div>
+        </div>
+        <div class="pricing-body">
+            <ul class="pricing-features">
+                <li>Full Monte Carlo simulation engine</li>
+                <li>Unlimited cost &amp; schedule risk analyses</li>
+                <li>Unlimited projects</li>
+                <li>Distribution curves &amp; tornado diagrams</li>
+                <li>Tail driver analysis</li>
+                <li>Correlation modeling (Gaussian copula)</li>
+                <li>Risk register with export</li>
+                <li>Project backup &amp; restore</li>
+                <li>Lifetime updates &amp; email support</li>
+            </ul>
+            <a href="purchase.html" class="btn btn-primary">Purchase License</a>
+            <p class="trial-note">Free 90-day trial included with download. Up to 3 projects during trial.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+    <div class="section-header">
+        <h2>About PRBE</h2>
+    </div>
+    <div class="about-grid">
+        <div class="about-text">
+            <p>PRBE was created by Michael Smith following his retirement from the Federal Highway Administration in 2023, where he spent 32 years advancing quantitative risk assessment for highway infrastructure projects.</p>
+            <p>The application implements the methodology taught in the National Highway Institute (NHI) Course 134205, making rigorous probabilistic cost and schedule estimating accessible to project teams without requiring specialized statistical software.</p>
+            <p>PRBE is a standalone desktop application that runs entirely on your local machine. It launches a local server and opens in your web browser, requiring no cloud connectivity or external dependencies. All project data remains on your computer, ensuring complete data privacy and security.</p>
+            <p>Compatible with Microsoft Windows. Chrome, Edge, or Firefox recommended for the best experience.</p>
+        </div>
+        <div class="about-contact">
+            <h3>Contact &amp; Support</h3>
+            <div class="contact-item">
+                <div class="contact-icon">&#9993;</div>
+                <div>Michael.Smith935@gmail.com</div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">&#9742;</div>
+                <div>678-702-7769</div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">&#128218;</div>
+                <div><a href="https://www.nhi.fhwa.dot.gov/course-search?tab=0&key=134205" target="_blank" rel="noopener">NHI Course 134205</a></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">&#128187;</div>
+                <div><a href="https://github.com/michaelsmith935-ux/PRBE" target="_blank" rel="noopener">GitHub Repository</a></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#methodology">Methodology</a>
+        <a href="#pricing">Pricing</a>
+        <a href="purchase.html">Purchase</a>
+        <a href="https://github.com/michaelsmith935-ux/PRBE/releases" target="_blank">Download</a>
+    </div>
+    <p>&copy; 2026 PRBE &mdash; Probabilistic Risk-Based Estimating for Highway Construction</p>
+</footer>
+
+</body>
+</html>
