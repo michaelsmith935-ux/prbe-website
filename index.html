@@ -418,6 +418,84 @@
             color: var(--text-light);
         }
 
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .pricing-card.renewal .pricing-header {
+            background: #2c5282;
+        }
+
+        .pricing-card.renewal .pricing-body .btn {
+            background: var(--accent);
+        }
+
+        .pricing-card.renewal .pricing-body .btn:hover {
+            background: var(--accent-bright);
+        }
+
+        /* ========== HERO RENEW LINK ========== */
+        .hero-renew {
+            margin-top: 0.25rem;
+            font-size: 0.92rem;
+            opacity: 0.85;
+        }
+
+        .hero-renew a {
+            color: #bee3f8;
+            text-decoration: underline;
+        }
+
+        .hero-renew a:hover {
+            color: white;
+        }
+
+        .version-badge {
+            display: inline-block;
+            margin-top: 1.25rem;
+            padding: 0.4rem 1rem;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        /* ========== FAQ ========== */
+        .faq-bg {
+            background: var(--card-bg);
+        }
+
+        .faq-grid {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .faq-q {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .faq-q h4 {
+            color: var(--primary);
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-q p {
+            color: var(--text);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
         /* ========== ABOUT ========== */
         .about-grid {
             display: grid;
@@ -510,10 +588,10 @@
         <ul class="nav-links">
             <li><a href="#features">Features</a></li>
             <li><a href="#screenshots">Screenshots</a></li>
-            <li><a href="#methodology">Methodology</a></li>
             <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#about">About</a></li>
+            <li><a href="#faq">FAQ</a></li>
             <li><a href="https://github.com/michaelsmith935-ux/PRBE/releases" target="_blank">Download</a></li>
+            <li><a href="https://buy.stripe.com/00w00l54hcDG3Hm0rI2Fa01" target="_blank">Renew License</a></li>
             <li><a href="purchase.html" class="nav-cta">Purchase License</a></li>
         </ul>
     </div>
@@ -528,7 +606,9 @@
         <a href="https://github.com/michaelsmith935-ux/PRBE/releases" target="_blank" class="btn btn-primary">Download Free Trial</a>
         <a href="purchase.html" class="btn btn-secondary">Purchase License &mdash; $29.99</a>
     </div>
-    <div class="hero-screenshot">
+    <p class="hero-renew">Already own PRBE? <a href="https://buy.stripe.com/00w00l54hcDG3Hm0rI2Fa01" target="_blank">Renew &rarr;</a></p>
+    <div class="version-badge">Latest version: v1.7.0 &mdash; released 2026-04-14</div>
+    <div class="hero-screenshot" style="margin-top: 2.5rem;">
         <img src="images/image14.png" alt="PRBE Simulation Results - Distribution Charts showing probability distributions for project cost and completion date">
     </div>
 </section>
@@ -697,29 +777,95 @@
 <!-- PRICING -->
 <section class="section" id="pricing">
     <div class="section-header">
-        <h2>Simple, One-Time Pricing</h2>
-        <p>Start with a free 90-day trial. Purchase when you're ready.</p>
+        <h2>Simple, Perpetual Licensing</h2>
+        <p>Start with a free 90-day trial. Your license never expires &mdash; the app keeps working forever.</p>
     </div>
-    <div class="pricing-card">
-        <div class="pricing-header">
-            <h3>PRBE Full License</h3>
-            <div class="pricing-price">$29.99</div>
-            <div class="pricing-note">One-time payment &bull; Lifetime license</div>
+    <div class="pricing-grid">
+
+        <!-- New License -->
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <h3>New License</h3>
+                <div class="pricing-price">$29.99</div>
+                <div class="pricing-note">One-time payment &bull; No subscription</div>
+            </div>
+            <div class="pricing-body">
+                <p style="text-align:left; color:var(--text-light); margin-bottom:1rem; font-size:0.95rem;">
+                    Perpetual use of any PRBE build released in your first 12 months. The app keeps working forever on versions you're entitled to.
+                </p>
+                <ul class="pricing-features">
+                    <li>Full Monte Carlo simulation engine</li>
+                    <li>Unlimited cost &amp; schedule risk analyses</li>
+                    <li>Distribution curves &amp; tornado diagrams</li>
+                    <li>12 months of free updates from purchase date</li>
+                    <li>Renew anytime for $14.99 to extend another 12 months</li>
+                    <li>Email support during your active coverage window</li>
+                </ul>
+                <a href="https://buy.stripe.com/fZu8wR1S5fPSb9Oeiy2Fa00" target="_blank" class="btn btn-primary">Purchase &mdash; $29.99</a>
+                <p class="trial-note">Free 90-day trial included with download. Up to 3 projects during trial.</p>
+            </div>
         </div>
-        <div class="pricing-body">
-            <ul class="pricing-features">
-                <li>Full Monte Carlo simulation engine</li>
-                <li>Unlimited cost &amp; schedule risk analyses</li>
-                <li>Unlimited projects</li>
-                <li>Distribution curves &amp; tornado diagrams</li>
-                <li>Tail driver analysis</li>
-                <li>Correlation modeling (Gaussian copula)</li>
-                <li>Risk register with export</li>
-                <li>Project backup &amp; restore</li>
-                <li>Lifetime updates &amp; email support</li>
-            </ul>
-            <a href="purchase.html" class="btn btn-primary">Purchase License</a>
-            <p class="trial-note">Free 90-day trial included with download. Up to 3 projects during trial.</p>
+
+        <!-- Renewal -->
+        <div class="pricing-card renewal">
+            <div class="pricing-header">
+                <h3>Renewal</h3>
+                <div class="pricing-price">$14.99</div>
+                <div class="pricing-note">Half price &bull; Optional, no auto-renew</div>
+            </div>
+            <div class="pricing-body">
+                <p style="text-align:left; color:var(--text-light); margin-bottom:1rem; font-size:0.95rem;">
+                    Already a customer? Extend your upgrade coverage another 12 months for half price. Renew anytime &mdash; there's no lapse penalty.
+                </p>
+                <ul class="pricing-features">
+                    <li>Extends upgrade coverage another 12 months</li>
+                    <li>Access to all new PRBE releases during the window</li>
+                    <li>Email support during your renewed coverage</li>
+                    <li>No auto-renew &mdash; you control when to extend</li>
+                    <li>Renew anytime, even after your window expires</li>
+                </ul>
+                <a href="https://buy.stripe.com/00w00l54hcDG3Hm0rI2Fa01" target="_blank" class="btn btn-primary">Renew &mdash; $14.99</a>
+                <p class="trial-note">Your Machine ID is visible in the top bar of the app once it is licensed.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-bg" id="faq">
+    <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+        <p>Everything you need to know about PRBE licensing.</p>
+    </div>
+    <div class="faq-grid">
+        <div class="faq-q">
+            <h4>What exactly am I buying?</h4>
+            <p>A perpetual license to any PRBE build released within the 12 months after your purchase. The app you install never stops working &mdash; there's no subscription, no phone-home, no auto-renew.</p>
+        </div>
+        <div class="faq-q">
+            <h4>What happens after 12 months?</h4>
+            <p>Your installed PRBE keeps working forever. If we release a newer version and you want it, renew for $14.99 to get another 12-month upgrade window. If you don't care about new versions, do nothing &mdash; your current build is yours.</p>
+        </div>
+        <div class="faq-q">
+            <h4>What do I lose if I don't renew?</h4>
+            <p>Only access to newer releases. No features get disabled, no projects become inaccessible.</p>
+        </div>
+        <div class="faq-q">
+            <h4>Can I use my license on a new computer?</h4>
+            <p>Licenses are bound to a Machine ID. Email support and we'll reissue at no charge.</p>
+        </div>
+        <div class="faq-q">
+            <h4>Do you offer refunds?</h4>
+            <p>Yes &mdash; contact us within 30 days if PRBE isn't working for you.</p>
+        </div>
+        <div class="faq-q">
+            <h4>Is there a subscription?</h4>
+            <p>No. Renewals are optional and manual. You control when (or whether) to extend.</p>
+        </div>
+        <div class="faq-q">
+            <h4>I bought PRBE before April 2026. Does this change anything for me?</h4>
+            <p>No. Customers who purchased before the upgrade-window model was introduced keep lifetime access to all future versions &mdash; no renewal needed, ever.</p>
         </div>
     </div>
 </section>

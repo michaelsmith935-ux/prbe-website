@@ -291,6 +291,46 @@
             margin-bottom: 0.25rem;
         }
 
+        /* Two-product pricing grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto 2.5rem;
+            align-items: start;
+        }
+
+        .pricing-grid .purchase-card {
+            max-width: none;
+            margin: 0;
+        }
+
+        .purchase-card.renewal .purchase-header {
+            background: #2c5282;
+        }
+
+        .renewal-note {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 0.85rem 1.1rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.25rem;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .version-badge {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.35rem 0.9rem;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+        }
+
         /* Responsive */
         @media (max-width: 600px) {
             header h1 { font-size: 1.6rem; }
@@ -304,6 +344,7 @@
 <header>
     <h1>PRBE Application Tool</h1>
     <p>Probabilistic Risk-Based Estimating &mdash; Improving the reliability of project estimates one analysis at a time</p>
+    <span class="version-badge">Latest version: v1.7.0 &mdash; released 2026-04-14</span>
 </header>
 
 <div class="container">
@@ -326,76 +367,142 @@
             <h3>Receive Your License</h3>
             <p>After payment is confirmed, a license key tied to your machine will be emailed to you.</p>
         </div>
+        <div class="step-card">
+            <div class="step-number">4</div>
+            <h3>Staying Up to Date</h3>
+            <p>PRBE notifies you in-app when a new release is available and when your upgrade coverage is nearing expiry. You can keep running your current version forever, or renew for $14.99 to unlock the latest build.</p>
+        </div>
     </div>
 
-    <!-- Purchase Card -->
-    <div class="purchase-card">
-        <div class="purchase-header">
-            <h2>PRBE Full License</h2>
-            <div class="price">$29.99</div>
-            <div class="price-note">One-time payment &bull; Lifetime license</div>
-        </div>
-        <div class="purchase-body">
-            <ul class="features-list">
-                <li>Full Monte Carlo simulation engine</li>
-                <li>Unlimited cost &amp; schedule risk analyses</li>
-                <li>Distribution curves &amp; tornado diagrams</li>
-                <li>Lifetime updates &amp; email support</li>
-            </ul>
+    <!-- Pricing Grid: New License + Renewal -->
+    <div class="pricing-grid">
 
-            <div class="machine-id-help">
-                <strong>Where do I find my Machine ID?</strong>
-                Open the PRBE demo application. Your Machine ID is displayed on the startup screen under "License Information."
+        <!-- New License -->
+        <div class="purchase-card" id="new-license">
+            <div class="purchase-header">
+                <h2>New License</h2>
+                <div class="price">$29.99</div>
+                <div class="price-note">One-time payment &bull; Perpetual use</div>
             </div>
+            <div class="purchase-body">
+                <ul class="features-list">
+                    <li>Full Monte Carlo simulation engine</li>
+                    <li>Unlimited cost &amp; schedule risk analyses</li>
+                    <li>Distribution curves &amp; tornado diagrams</li>
+                    <li>12 months of free upgrades to new releases</li>
+                    <li>Keep running your licensed version forever</li>
+                    <li>Email support</li>
+                </ul>
 
-            <form id="purchaseForm">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
-                    <div class="form-hint">Your license key will be sent to this address.</div>
+                <div class="machine-id-help">
+                    <strong>Where do I find my Machine ID?</strong>
+                    Open the PRBE demo application. Your Machine ID is displayed on the startup screen under "License Information."
                 </div>
 
-                <div class="form-group">
-                    <label for="machineId">Machine ID</label>
-                    <input type="text" id="machineId" name="machineId" placeholder="e.g. 76678B00534BCC7C" required>
-                    <div class="form-hint">Copy this exactly from the PRBE demo application.</div>
-                </div>
+                <form id="purchaseForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                        <div class="form-hint">Your license key will be sent to this address.</div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" placeholder="John Smith" required>
-                </div>
+                    <div class="form-group">
+                        <label for="machineId">Machine ID</label>
+                        <input type="text" id="machineId" name="machineId" placeholder="e.g. 76678B00534BCC7C" required>
+                        <div class="form-hint">Copy this exactly from the PRBE demo application.</div>
+                    </div>
 
-                <!--
-                    ============================================================
-                    STRIPE INTEGRATION — CHOOSE ONE OPTION BELOW
-                    ============================================================
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="John Smith" required>
+                    </div>
 
-                    OPTION A  (Recommended — No Code):
-                    Use a Stripe Payment Link. Replace the button's onclick
-                    with a redirect to your Stripe Payment Link URL.
+                    <button type="submit" class="buy-button" id="buyBtn">
+                        Purchase License &mdash; $29.99
+                    </button>
+                </form>
 
-                    OPTION B  (Advanced):
-                    Use Stripe Checkout with a server-side endpoint.
-                    See the setup-instructions.md file for details.
-                    ============================================================
-                -->
-
-                <button type="submit" class="buy-button" id="buyBtn">
-                    Purchase License &mdash; $29.99
-                </button>
-            </form>
-
-            <p class="secure-note">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C8.676 1 6 3.676 6 7v2H4v14h16V9h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4zm0 10c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/></svg>
-                Payments are processed securely by <strong>Stripe</strong>. We never store your card details.
-            </p>
+                <p class="secure-note">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C8.676 1 6 3.676 6 7v2H4v14h16V9h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4zm0 10c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/></svg>
+                    Payments are processed securely by <strong>Stripe</strong>. We never store your card details.
+                </p>
+            </div>
         </div>
+
+        <!-- Renewal -->
+        <div class="purchase-card renewal" id="renew">
+            <div class="purchase-header">
+                <h2>Renew Upgrade Coverage</h2>
+                <div class="price">$14.99</div>
+                <div class="price-note">Extends upgrades for 12 more months</div>
+            </div>
+            <div class="purchase-body">
+                <ul class="features-list">
+                    <li>Unlocks all releases published during your coverage window</li>
+                    <li>Keep the latest features, fixes, and engine improvements</li>
+                    <li>Continued email support</li>
+                    <li>Optional &mdash; your existing version keeps working without it</li>
+                </ul>
+
+                <div class="renewal-note">
+                    <strong>Renewing?</strong> Your Machine ID is visible in the top bar of the app once it is licensed.
+                </div>
+
+                <form id="renewForm">
+                    <div class="form-group">
+                        <label for="renewEmail">Email Address</label>
+                        <input type="email" id="renewEmail" name="email" placeholder="you@example.com" required>
+                        <div class="form-hint">The email tied to your existing license.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="renewMachineId">Machine ID</label>
+                        <input type="text" id="renewMachineId" name="machineId" placeholder="e.g. 76678B00534BCC7C" required>
+                        <div class="form-hint">From the top bar of your licensed PRBE app.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="renewFullName">Full Name</label>
+                        <input type="text" id="renewFullName" name="fullName" placeholder="John Smith" required>
+                    </div>
+
+                    <button type="submit" class="buy-button" id="renewBtn" style="background:#2c5282;">
+                        Renew Coverage &mdash; $14.99
+                    </button>
+                </form>
+
+                <p class="secure-note">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C8.676 1 6 3.676 6 7v2H4v14h16V9h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4zm0 10c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/></svg>
+                    Payments are processed securely by <strong>Stripe</strong>.
+                </p>
+            </div>
+        </div>
+
     </div>
 
     <!-- FAQ -->
     <div class="info-section">
         <h3>Frequently Asked Questions</h3>
+
+        <div class="faq-item">
+            <strong>What does the $29.99 license include?</strong>
+            <p>A perpetual license to run PRBE on one machine, plus 12 months of free upgrades to any new releases published during that window.</p>
+        </div>
+
+        <div class="faq-item">
+            <strong>What happens after 12 months?</strong>
+            <p>Your installed version keeps working forever. To unlock releases published after your coverage window, renew for $14.99 for another 12 months of upgrades.</p>
+        </div>
+
+        <div class="faq-item">
+            <strong>Do I have to renew?</strong>
+            <p>No. Renewal is optional. You only need it if you want the newest releases.</p>
+        </div>
+
+        <div class="faq-item">
+            <strong>I bought PRBE before v1.7 &mdash; does this affect me?</strong>
+            <p>No. Licenses purchased before v1.7 include lifetime upgrades at no additional cost. You will continue to receive all future releases free of charge.</p>
+        </div>
 
         <div class="faq-item">
             <strong>How long does it take to receive my license?</strong>
@@ -443,44 +550,43 @@
     // via URL parameters so you can see them in your dashboard.
     // ============================================================
 
-    const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/fZu8wR1S5fPSb9Oeiy2Fa00';
+    const STRIPE_NEW_LICENSE_LINK = 'https://buy.stripe.com/fZu8wR1S5fPSb9Oeiy2Fa00';
+    const STRIPE_RENEWAL_LINK     = 'https://buy.stripe.com/00w00l54hcDG3Hm0rI2Fa01';
 
-    document.getElementById('purchaseForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    function handleSubmit(formId, emailId, machineId, fullNameId, stripeLink) {
+        document.getElementById(formId).addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        const email = document.getElementById('email').value.trim();
-        const machineId = document.getElementById('machineId').value.trim();
-        const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById(emailId).value.trim();
+            const machine = document.getElementById(machineId).value.trim();
+            const fullName = document.getElementById(fullNameId).value.trim();
 
-        if (!email || !machineId || !fullName) {
-            alert('Please fill in all fields before proceeding.');
-            return;
-        }
+            if (!email || !machine || !fullName) {
+                alert('Please fill in all fields before proceeding.');
+                return;
+            }
 
-        // Validate email format
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            alert('Please enter a valid email address.');
-            return;
-        }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
 
-        // Build the Stripe Payment Link URL with prefilled email
-        // The machine ID will be collected via Stripe's custom field
-        const paymentUrl = STRIPE_PAYMENT_LINK
-            + '?prefilled_email=' + encodeURIComponent(email)
-            + '&client_reference_id=' + encodeURIComponent(machineId);
+            const paymentUrl = stripeLink
+                + '?prefilled_email=' + encodeURIComponent(email)
+                + '&client_reference_id=' + encodeURIComponent(machine);
 
-        // Store info locally so the success page can reference it
-        try {
-            sessionStorage.setItem('prbe_name', fullName);
-            sessionStorage.setItem('prbe_email', email);
-            sessionStorage.setItem('prbe_machine_id', machineId);
-        } catch(e) {
-            // sessionStorage may not be available in all contexts
-        }
+            try {
+                sessionStorage.setItem('prbe_name', fullName);
+                sessionStorage.setItem('prbe_email', email);
+                sessionStorage.setItem('prbe_machine_id', machine);
+            } catch(e) { /* ignore */ }
 
-        // Redirect to Stripe Checkout
-        window.location.href = paymentUrl;
-    });
+            window.location.href = paymentUrl;
+        });
+    }
+
+    handleSubmit('purchaseForm', 'email',      'machineId',      'fullName',      STRIPE_NEW_LICENSE_LINK);
+    handleSubmit('renewForm',    'renewEmail', 'renewMachineId', 'renewFullName', STRIPE_RENEWAL_LINK);
 </script>
 
 </body>
